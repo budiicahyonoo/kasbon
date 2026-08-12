@@ -16,7 +16,7 @@ Aplikasi web sederhana untuk melacak utang piutang pribadi. Dibangun menggunakan
 5. Jalankan *development server* dengan `npm run dev`.
 
 ## Demo
-[Masukkan Link Vercel Anda Di Sini]
+https://kasbon-test.vercel.app/
 
 ## Approach (Keputusan Teknis)
 Saya mengadopsi arsitektur pemisahan *Client Components* dan *Server-side API Routes* pada Next.js. Halaman *dashboard* menggunakan *Client Components* agar interaksi UI seperti *toggle* status lunas, *filter*, dan kalkulasi *summary* dapat berjalan instan dan reaktif. Untuk keamanan, proteksi berlapis diterapkan: *Middleware/Proxy* untuk memblokir akses rute *frontend*, API Routes divalidasi dengan pengecekan sesi *backend*, dan kebijakan *Row Level Security* (RLS) ketat di level *database* Postgres untuk memastikan data terisolasi sempurna secara kriptografis berdasarkan `auth.uid()`.
