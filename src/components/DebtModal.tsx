@@ -40,6 +40,7 @@ export default function DebtModal({ isOpen, onClose, onSuccess, editData }: Debt
     setLoading(true)
     setError(null)
 
+    // Parse angka murni dari state amount
     const numericAmount = parseInt(amount, 10)
     if (isNaN(numericAmount) || numericAmount <= 0) {
       setError('Jumlah harus berupa angka valid lebih dari 0.')
@@ -79,6 +80,11 @@ export default function DebtModal({ isOpen, onClose, onSuccess, editData }: Debt
     }
   }
 
+  // Fungsi utilitas untuk memformat angka dengan titik (ribuan)
+  const formatRibuan = (angka: string) => {
+    return angka.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+  }
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
       <div className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden">
@@ -108,17 +114,30 @@ export default function DebtModal({ isOpen, onClose, onSuccess, editData }: Debt
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Nama Orang</label>
-            <input type="text" value={name} onChange={(e) => setName(e.target.value)} required maxLength={50} className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Misal: Budi" />
+            <input type="text" value={name} onChange={(e) => setName(e.target.value)} required maxLength={50} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Misal: Budi" />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Jumlah (Rp)</label>
-            <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} required min="1" className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" placeholder="100000" />
+            <input 
+              type="text" 
+              inputMode="numeric"
+              // Tampilkan dengan format titik
+              value={formatRibuan(amount)} 
+              onChange={(e) => {
+                // Hapus semua karakter non-angka saat menyimpan ke state
+                const rawValue = e.target.value.replace(/[^0-9]/g, '');
+                setAmount(rawValue);
+              }} 
+              required 
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none" 
+              placeholder="100.000" 
+            />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Catatan (Opsional)</label>
-            <textarea value={note} onChange={(e) => setNote(e.target.value)} maxLength={200} rows={2} className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none resize-none" placeholder="Untuk bayar makan..." />
+            <textarea value={note} onChange={(e) => setNote(e.target.value)} maxLength={200} rows={2} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none resize-none" placeholder="Untuk bayar makan..." />
           </div>
 
           <div className="pt-4 flex gap-3">
